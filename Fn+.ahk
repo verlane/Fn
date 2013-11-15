@@ -33,6 +33,7 @@ v::
  	}
 	ShowModeTooltip()
 return
+SC027::Send % (IS_FNMODE ? "{AppsKey}" : ";") ;Semicolon
 a::SendFnKey("", "", "a", true, true)
 +a::SendFnKey("{End}", "{End}", "A", true, true)
 b::SendFnKey("+{PgUp}", "{PgUp}", "b")
