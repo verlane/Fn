@@ -4,21 +4,21 @@
 ; Vim like (https://github.com/verlane/Fn)
 ; ===========================================================
 SetKeyDelay, -1 ;AutoHotkey 키 입력Delay를 최소화(기본값은 10)
-global IS_FNMODE_FIXED := false ; Vim모드 고정인가?
-global IS_FNMODE := false ; 명령어 모드인가?
+global IS_FNKEY_FIXED := false ; Fn키 고정인가?
+global IS_NMODE := false ; 노멀 모드인가?
 global IS_VMODE := false ; 비주얼 모드인가?
 
-CapsLock::IS_FNMODE := true
+CapsLock::IS_NMODE := true
 CapsLock Up::
-	if (!IS_FNMODE_FIXED) {
-		IS_FNMODE := false
+	if (!IS_FNKEY_FIXED) {
+		IS_NMODE := false
 		IS_VMODE := false
 	}
 return
 Space::
-	if (IS_FNMODE) {
-		IS_FNMODE_FIXED := !IS_FNMODE_FIXED 
-		if (!IS_FNMODE_FIXED) {
+	if (IS_NMODE) {
+		IS_FNKEY_FIXED := !IS_FNKEY_FIXED 
+		if (!IS_FNKEY_FIXED) {
 			ClearAllMode()
 		}
 	} else {
@@ -28,14 +28,14 @@ Space::
 return
 Esc::SendEscKey()
 v::
-	if (IS_FNMODE) {
+	if (IS_NMODE) {
  		IS_VMODE := !IS_VMODE
  	} else {
  		Send v
  	}
 	ShowModeTooltip()
 return
-SC027::Send % (IS_FNMODE ? "{AppsKey}" : ";") ;Semicolon
+SC027::Send % (IS_NMODE ? "{AppsKey}" : ";") ;Semicolon
 a::SendFnKey("", "", "a", true, true)
 +a::SendFnKey("{End}", "{End}", "A", true, true)
 b::SendFnKey("+{PgUp}", "{PgUp}", "b")
@@ -68,22 +68,22 @@ x::SendFnKey("^x", "{Delete}", "x", true)
 +x::SendFnKey("^x", "{BS}", "X", true)
 y::SendFnKey("^c", "{End}+{Home}^c", "y", true)
 
-SendFnKey(vmodeTKey, vmodeFKey, fnmodeFKey, clearVMode:=false, clearFnMode:=false) {
-	Send % (IS_FNMODE ? (IS_VMODE ? vmodeTKey : vmodeFKey) : fnmodeFKey)
+SendFnKey(vmodeTKey, vmodeFKey, nmodeFKey, clearVMode:=false, clearNMode:=false) {
+	Send % (IS_NMODE ? (IS_VMODE ? vmodeTKey : vmodeFKey) : nmodeFKey)
 	if (clearVMode)  {
 		IS_VMODE := false
 	}
-	if (IS_FNMODE_FIXED && clearFnMode)  {
-		IS_FNMODE := false
+	if (IS_FNKEY_FIXED && clearNMode)  {
+		IS_NMODE := false
 	}
 	ShowModeTooltip()
 }
 SendEscKey(sendCount:=1) {
-	if (IS_FNMODE_FIXED) {
-		if (IS_FNMODE && !IS_VMODE) {
+	if (IS_FNKEY_FIXED) {
+		if (IS_NMODE && !IS_VMODE) {
 			Send {Esc %sendCount%}
 		}
-		IS_FNMODE := true
+		IS_NMODE := true
 		IS_VMODE := false
 	} else {
 		Send {Esc %sendCount%}
@@ -91,14 +91,14 @@ SendEscKey(sendCount:=1) {
 	ShowModeTooltip()
 }
 ClearAllMode() {
-	IS_FNMODE_FIXED := false
-	IS_FNMODE := false
+	IS_FNKEY_FIXED := false
+	IS_NMODE := false
 	IS_VMODE := false
 }
 ShowModeTooltip() {
 	WinGetPos, x, y, width, height, A
-	if (IS_FNMODE_FIXED) {
-		ToolTip % (IS_FNMODE ? (IS_VMODE ? "[V]" : "[Fn]") : "[In]"), 0, height - 20
+	if (IS_FNKEY_FIXED) {
+		ToolTip % (IS_NMODE ? (IS_VMODE ? "[V]" : "[N]") : "[I]"), 0, height - 20
 	} else {
 		ToolTip
 	}
