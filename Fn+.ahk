@@ -1,11 +1,13 @@
 ﻿#UseHook
 
 ; ===========================================================
-; Vim like
+; Vim like (https://github.com/verlane/Fn)
 ; ===========================================================
+SetKeyDelay, -1 ;AutoHotkey 키 입력Delay를 최소화(기본값은 10)
 global IS_FNMODE_FIXED := false ; Vim모드 고정인가?
 global IS_FNMODE := false ; 명령어 모드인가?
 global IS_VMODE := false ; 비주얼 모드인가?
+
 CapsLock::IS_FNMODE := true
 CapsLock Up::
 	if (!IS_FNMODE_FIXED) {
@@ -65,6 +67,7 @@ w::SendFnKey("^+{Right}", "^{Right}", "w")
 x::SendFnKey("^x", "{Delete}", "x", true)
 +x::SendFnKey("^x", "{BS}", "X", true)
 y::SendFnKey("^c", "{End}+{Home}^c", "y", true)
+
 SendFnKey(vmodeTKey, vmodeFKey, fnmodeFKey, clearVMode:=false, clearFnMode:=false) {
 	Send % (IS_FNMODE ? (IS_VMODE ? vmodeTKey : vmodeFKey) : fnmodeFKey)
 	if (clearVMode)  {

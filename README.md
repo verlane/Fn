@@ -28,3 +28,4 @@ BackSpace | `X` | `X` or `e`
 Delete Line | `dd` | `d`
 Delete Line | `D` | `D`
 Copy Line | `yy` | `y`
+AppsKey | - | `Ctrl`+`;`
