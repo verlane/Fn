@@ -60,7 +60,7 @@ SendFnKey(sendKey, appendMode:="", removeMode:="") {
 }
 SendEscKey(sendCount:=1) {
 	if (IsVimMode("_fnFixed_")) {
-		if (IsVimMode("_normal_") && !IsVimMode("_visual_")) {
+		if (IsVimMode("_normal_")) {
 			Send {Esc %sendCount%}
 		}
 		SetVimMode("_normal_")
@@ -71,11 +71,19 @@ SendEscKey(sendCount:=1) {
 	gRepeatCount := 0
 	ShowModeTooltip()
 }
-ShowModeTooltip() {
-	WinGetPos, x, y, width, height, A
-	if (true || IsVimMode("_fnFixed_")) {
+
+ShowToolTip:
+	if (IsVimMode("_fnFixed_")) {
+		WinGetPos, x, y, width, height, A
 		ToolTip % gVimMode ":" gRepeatCount, 0, height - 20
+	}
+return
+
+ShowModeTooltip() {
+	if (IsVimMode("_fnFixed_")) {
+		SetTimer, ShowToolTip, 50
 	} else {
+		SetTimer, ShowToolTip, Off
 		ToolTip
 	}
 }
