@@ -50,13 +50,23 @@ SendNumberKey() {
 		Send % A_ThisHotkey
 	}
 }
-SendFnKey(sendKey, appendMode:="", removeMode:="") {
-	gRepeatCount := gRepeatCount < 1 ? 1 : gRepeatCount
-	sendKey := RegExReplace(sendKey, "_n_", gRepeatCount)
-	Send % (IsVimMode("_normal_") || IsVimMode("_visual_") ? sendKey : A_ThisHotkey)
-	SetVimMode(appendMode, removeMode)
-	gRepeatCount := 0
-	ShowModeTooltip()
+SendFnKey(sendKey, appendMode:="", removeMode:="", loopCount:=1) {
+	loopCount := loopCount < 1 ? 1 : loopCount
+	Loop % loopCount
+	{
+		gRepeatCount := gRepeatCount < 1 ? 1 : gRepeatCount
+		sendKey := RegExReplace(sendKey, "_n_", gRepeatCount)
+		Send % (IsVimMode("_normal_") || IsVimMode("_visual_") ? sendKey : A_ThisHotkey)
+		SetVimMode(appendMode, removeMode)
+		gRepeatCount := 0
+		ShowModeTooltip()
+	}
+}
+SendFnKeyLoop(sendKey, appendMode:="", removeMode:="") {
+	Loop gRepeatCount
+	{
+		SendFnKey(sendKey, appendMode, removeMode)
+	}
 }
 SendEscKey(sendCount:=1) {
 	if (IsVimMode("_fnFixed_")) {
@@ -127,8 +137,8 @@ x::SendFnKey("^x", "_normal_", "_lineCopy_")
 y::SendFnKey("^c", "_normal_", "_lineCopy_")
 
 #If IsVimMode("_normal_") && IsVimMode("_lineCopy_")
-p::SendFnKey("{Down}{Home}^v{Up}")
-+p::SendFnKey("{Home}^v")
+p::SendFnKey("{Down}{Home}^v{Up}", "", "", gRepeatCount)
++p::SendFnKey("{Home}^v", "", "", gRepeatCount)
 
 #If IsVimMode("_normal_")
 d::SendFnKey("{Home}+{Down _n_}^x", "_lineCopy_")
@@ -199,8 +209,8 @@ m::SendFnKey("{Home}")
 +4::SendFnKey("{End}")
 o::SendFnKey("{End}{Enter _n_}", "_insert_")
 +o::SendFnKey("{Home}{Enter _n_}{Up _n_}", "_insert_")
-p::SendFnKey("^v")
-+p::SendFnKey("^v")
+p::
++p::SendFnKey("^v", "", "", gRepeatCount)
 r::SendFnKey("{Del _n_}")
 u::SendFnKey("^z")
 +u::SendFnKey("^y")
