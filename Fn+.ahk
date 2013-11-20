@@ -3,10 +3,19 @@
 ; ===========================================================
 ; Vim like (https://github.com/verlane/Fn)
 ; ===========================================================
-; modes = {:imode => nil, :nmode => [:vmode, :cmode]}
+
 SetKeyDelay, -1 ;AutoHotkey 키 입력Delay를 최소화(기본값은 10)
 
-global gModes := Object(1, "_fnFixed_", 2, "_insert_", 3, "_normal_", 4, "_visual_", 5, "_preLineCopy_", 6, "_lineCopy_")
+; _fnFixed_ : Fn키 고정
+; _insert_ : 입력모드
+; _normal_ : 노멀모드
+; _visual_ : 비주얼모드
+; _preLineCopy_ : Shift+V 상태
+; _lineCopy_ : 행 복사 상태
+; _rKey_ : 노멀모드에서 r상태
+; _RKey_ : 노멀모드에서 R상태
+
+global gModes := Object(1, "_fnFixed_", 2, "_insert_", 3, "_normal_", 4, "_visual_", 5, "_preLineCopy_", 6, "_lineCopy_", 7, "_fnDown_")
 global gVimMode := "" ; 현재 모드
 global gRepeatCount := 0 ; 반복횟수
 
@@ -50,7 +59,7 @@ SendNumberKey() {
 		Send % A_ThisHotkey
 	}
 }
-SendFnKey(sendKey, appendMode:="", removeMode:="", loopCount:=1) {
+SendFnKey(sendKey="", appendMode:="", removeMode:="", loopCount:=1) {
 	loopCount := loopCount < 1 ? 1 : loopCount
 	Loop % loopCount
 	{
@@ -147,27 +156,28 @@ y::SendFnKey("{Home}+{Down _n_}^c{Up}", "_lineCopy_")
 
 #If
 CapsLock::
-	SetVimMode("_normal_")
+	SetVimMode("_normal_fnDown_")
 	ShowModeTooltip()
 return
 CapsLock Up::
-	if (!IsVimMode("_fnFixed_")) {
+	if (IsVimMode("_fnFixed_")) {
+		SetVimMode("", "_fnDown_")
+	} else {
 		ClearVimMode()
 	}
 	ShowModeTooltip()
 return
 Space::
-	if (IsVimMode("_normal_")) {
+	if (IsVimMode("_fnDown_")) {
 		if (IsVimMode("_fnFixed_")) {
 			SetVimMode("", "_fnFixed_")
+			ClearVimMode()
 		} else {
 			SetVimMode("_fnFixed_")
 		}
-		if (!IsVimMode("_fnFixed_")) {
-			ClearVimMode()
-		}
 	} else {
-		Send {Space}
+		if (IsVimMode("_insert_"))
+			Send {Space}
 	}	
 	ShowModeTooltip()	
 return
