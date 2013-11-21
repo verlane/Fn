@@ -14,8 +14,9 @@ SetKeyDelay, -1 ;AutoHotkey 키 입력Delay를 최소화(기본값은 10)
 ; _lineCopy_ : 행 복사 상태
 ; _rKey_ : 노멀모드에서 r상태
 ; _RKey_ : 노멀모드에서 R상태
+; _fnDown_ : Fn키가 눌려진 상태
 
-global gModes := Object(1, "_fnFixed_", 2, "_insert_", 3, "_normal_", 4, "_visual_", 5, "_preLineCopy_", 6, "_lineCopy_", 7, "_fnDown_")
+global gModes := Object(1, "_fnFixed_", 2, "_insert_", 3, "_normal_", 4, "_visual_", 5, "_preLineCopy_", 6, "_lineCopy_", 7, "_rDown_", 8, "_RDown_", 99, "_fnDown_")
 global gVimMode := "" ; 현재 모드
 global gRepeatCount := 0 ; 반복횟수
 
@@ -42,7 +43,6 @@ SetVimMode(appendMode:="", removeMode:="") {
 		}
 	}
 }
-
 ClearVimMode() {
 	gVimMode := ""
 	gRepeatCount := 0
@@ -51,30 +51,37 @@ IsVimMode(mode) {
 	return RegExMatch(gVimMode, mode)
 }
 SendNumberKey() {
-	if (IsVimMode("_normal_") || IsVimMode("_visual_")) {
+	if (!IsVimMode("_rDown_|_RDown") && IsVimMode("_normal_|_visual_")) {
 		gRepeatCount := gRepeatCount * 10 + A_ThisHotkey
 		gRepeatCount := gRepeatCount > 100 ? 100 : gRepeatCount
-		ShowModeTooltip()
 	} else {
-		Send % A_ThisHotkey
+		SendFnKey(A_ThisHotkey)
 	}
+}
+SendFnKeyRDown(sendThisHotkey:=true) {
+	if (IsVimMode("_rDown_|_RDown_")) {
+		Send % "{Del}" (sendThisHotkey ? A_ThisHotkey : "")
+		if (IsVimMode("_rDown_") && gRepeatCount > 0) {
+			gRepeatCount := gRepeatCount - 1
+		}
+		if (gRepeatCount < 1) {
+			SetVimMode("_normal_", "_rDown_")
+		}
+		return true
+	}
+	return false
 }
 SendFnKey(sendKey="", appendMode:="", removeMode:="", loopCount:=1) {
-	loopCount := loopCount < 1 ? 1 : loopCount
-	Loop % loopCount
-	{
-		gRepeatCount := gRepeatCount < 1 ? 1 : gRepeatCount
-		sendKey := RegExReplace(sendKey, "_n_", gRepeatCount)
-		Send % (IsVimMode("_normal_") || IsVimMode("_visual_") ? sendKey : A_ThisHotkey)
-		SetVimMode(appendMode, removeMode)
-		gRepeatCount := 0
-		ShowModeTooltip()
-	}
-}
-SendFnKeyLoop(sendKey, appendMode:="", removeMode:="") {
-	Loop gRepeatCount
-	{
-		SendFnKey(sendKey, appendMode, removeMode)
+	if (!SendFnKeyRDown()) {
+		loopCount := loopCount < 1 ? 1 : loopCount
+		Loop % loopCount
+		{
+			gRepeatCount := gRepeatCount < 1 ? 1 : gRepeatCount
+			sendKey := RegExReplace(sendKey, "_n_", gRepeatCount)
+			Send % (IsVimMode("_normal_|_visual_") ? sendKey : A_ThisHotkey)
+			SetVimMode(appendMode, removeMode)
+			gRepeatCount := 0
+		}
 	}
 }
 SendEscKey(sendCount:=1) {
@@ -86,20 +93,17 @@ SendEscKey(sendCount:=1) {
 	} else {
 		Send {Esc %sendCount%}
 	}
-	SetVimMode("", "_preLineCopy_")
+	SetVimMode("", "_preLineCopy_rDown_RDown_")
 	gRepeatCount := 0
-	ShowModeTooltip()
 }
-
 ShowToolTip:
 	if (IsVimMode("_fnFixed_")) {
 		WinGetPos, x, y, width, height, A
 		ToolTip % gVimMode ":" gRepeatCount, 0, height - 20
 	}
 return
-
 ShowModeTooltip() {
-	if (IsVimMode("_fnFixed_")) {
+	if (IsVimMode("_fnFixed_|_fnDown_")) {
 		SetTimer, ShowToolTip, 50
 	} else {
 		SetTimer, ShowToolTip, Off
@@ -108,7 +112,6 @@ ShowModeTooltip() {
 }
 
 #If IsVimMode("_fnFixed_") && IsVimMode("_normal_")
-r::SendFnKey("{Del _n_}", "_insert_")
 
 #If IsVimMode("_visual"_) && IsVimMode("_preLineCopy_")
 h::
@@ -116,8 +119,6 @@ l::
 w::
 b::SendFnKey("")
 d::SendFnKey("^x", "_normal_lineCopy_", "_preLineCopy_")
-e::SendFnKey("^x", "_normal_lineCopy_", "_preLineCopy_")
-r::SendFnKey("^x", "_normal_lineCopy_", "_preLineCopy_")
 x::SendFnKey("^x", "_normal_lineCopy_", "_preLineCopy_")
 +x::SendFnKey("^x", "_normal_lineCopy_", "_preLineCopy_")
 y::SendFnKey("^c", "_normal_lineCopy_", "_preLineCopy_")
@@ -126,7 +127,6 @@ y::SendFnKey("^c", "_normal_lineCopy_", "_preLineCopy_")
 b::SendFnKey("^+{Left _n_}")
 d::SendFnKey("^x", "_normal_", "_lineCopy_")
 +d::SendFnKey("^x", "_normal_", "_lineCopy_")
-e::SendFnKey("^x", "_normal_", "_lineCopy_")
 f::SendFnKey("+{PgDn _n_}")
 +f::SendFnKey("+{PgUp _n_}")
 g::SendFnKey("^+{Home}")
@@ -139,8 +139,8 @@ m::SendFnKey("+{Home}")
 +6::SendFnKey("+{Home}")
 ,::SendFnKey("+{End}")
 +4::SendFnKey("+{End}")
-r::SendFnKey("^x", "_normal_", "_lineCopy_")
 w::SendFnKey("^+{Right _n_}")
+e::SendFnKey("^+{Right _n_}+{Left}")
 x::SendFnKey("^x", "_normal_", "_lineCopy_")
 +x::SendFnKey("^x", "_normal_", "_lineCopy_")
 y::SendFnKey("^c", "_normal_", "_lineCopy_")
@@ -149,16 +149,28 @@ y::SendFnKey("^c", "_normal_", "_lineCopy_")
 p::SendFnKey("{Down}{Home}^v{Up}", "", "", gRepeatCount)
 +p::SendFnKey("{Home}^v", "", "", gRepeatCount)
 
+#If IsVimMode("_normal_") && !IsVimMode("_rDown_|_RDown_")
+r::SetVimMode("_insert_rDown_")
++r::SetVimMode("_insert_RDown_")
+
+#If IsVimMode("_rDown_|_RDown_")
+v::
++V::SendFnKey()
+~!::
+~#::
+~+::
+~{::
+~}::
+	SendFnKeyRDown(false)
+return
+
 #If IsVimMode("_normal_")
-d::SendFnKey("{Home}+{Down _n_}^x", "_lineCopy_")
+d::SendFnKey("{Home}+{Down _n_}^c{Del}", "_lineCopy_")
 y::SendFnKey("{Home}+{Down _n_}^c{Up}", "_lineCopy_")
 +y::SendFnKey("{Home}+{Down _n_}^c{Up}", "_lineCopy_")
 
 #If
-CapsLock::
-	SetVimMode("_normal_fnDown_")
-	ShowModeTooltip()
-return
+CapsLock::SetVimMode("_normal_fnDown_")
 CapsLock Up::
 	if (IsVimMode("_fnFixed_")) {
 		SetVimMode("", "_fnDown_")
@@ -175,11 +187,10 @@ Space::
 		} else {
 			SetVimMode("_fnFixed_")
 		}
+		ShowModeTooltip()
 	} else {
-		if (IsVimMode("_insert_"))
-			Send {Space}
+		Send {Space}
 	}	
-	ShowModeTooltip()	
 return
 Esc::SendEscKey()
 +v::
@@ -194,14 +205,12 @@ v::
  	} else {
  		Send % A_ThisHotkey
  	}
-	ShowModeTooltip()
 return
 a::SendFnKey("", "_insert_")
 +a::SendFnKey("{End}", "_insert_")
 b::SendFnKey("^{Left _n_}")
 d::SendFnKey("{Home}+{Down _n_}^x")
 +d::SendFnKey("+{End}^x")
-e::SendFnKey("{BS _n_}")
 f::SendFnKey("{PgDn _n_}")
 +f::SendFnKey("{PgUp _n_}")
 g::SendFnKey("^{Home}")
@@ -213,22 +222,56 @@ j::SendFnKey("{Down _n_}")
 +j::SendFnKey("{End}{Del}")
 k::SendFnKey("{Up _n_}")
 l::SendFnKey("{Right _n_}")
-m::SendFnKey("{Home}")
+m::
 +6::SendFnKey("{Home}")
-,::SendFnKey("{End}")
+,::
 +4::SendFnKey("{End}")
 o::SendFnKey("{End}{Enter _n_}", "_insert_")
 +o::SendFnKey("{Home}{Enter _n_}{Up _n_}", "_insert_")
 p::
 +p::SendFnKey("^v", "", "", gRepeatCount)
-r::SendFnKey("{Del _n_}")
 u::SendFnKey("^z")
 +u::SendFnKey("^y")
+e::SendFnKey("^{Right _n_}{Left}")
 w::SendFnKey("^{Right _n_}")
 x::SendFnKey("{Del _n_}")
 +x::SendFnKey("{BS _n_}")
 y::SendFnKey("{Home}+{Down _n_}^c{Up}")
 +y::SendFnKey("{Home}+{Down _n_}^c{Up}")
+c::
++c::
+n::
++n::
+q::
++q::
+r::
++r::
+s::
++s::
+t::
++t::
+z::
++z::
+`::
+@::
+&::
+*::
+(::
+)::
+-::
+_::
+=::
+[::
+]::
+\::
+|::
+'::
+"::
+<::
+.::
+>::
+;::
+:::SendFnKey()
 ~::
 	if (IsVimMode("_normal_")) {
 		temp := ClipboardAll
@@ -254,9 +297,8 @@ return
 6::
 7::
 8::
-9::
-	SendNumberKey()
-return
+9::SendNumberKey()
+
 
 ^c::
 ^x::
