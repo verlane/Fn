@@ -15,3 +15,5 @@ o::SendFnKey("{End}{Enter _n_}")
 #If IsVimMode("_fnDown_") && IsVimMode("_visual_") 
 t::SendFnKey("+{End}")
 
+#If IsVimMode("_fnDown_")
+m::SendFnKey("{Enter}")

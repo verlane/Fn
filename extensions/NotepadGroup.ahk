@@ -11,5 +11,8 @@ return
 	Sleep 100
 	Send ^v!d!f{Esc 2}
 return
-/::SendFnKey("^f")
+/::
+	SendFnKey("^f")
+	SetVimMode("_insert_")
+return
 n::SendFnKey("{F3}")
