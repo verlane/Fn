@@ -21,4 +21,14 @@ if (isMakeExetensions) {
 	}
 }
 
+PostMessage(Receiver, Message) {
+	oldTMM := A_TitleMatchMode, oldDHW := A_DetectHiddenWindows
+	SetTitleMatchMode, 3
+	DetectHiddenWindows, on
+	PostMessage, 0x1001,%Message%,,, %Receiver% ahk_class AutoHotkeyGUI
+	SetTitleMatchMode, %oldTMM%
+	DetectHiddenWindows, %oldDHW%
+}
+
+PostMessage("Slave Script", 1)	; exits slave script
 Run %A_ScriptDir%\Fn+.ahk
