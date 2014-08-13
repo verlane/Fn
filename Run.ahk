@@ -30,5 +30,5 @@ PostMessage(Receiver, Message) {
 	DetectHiddenWindows, %oldDHW%
 }
 
-PostMessage("Slave Script", 1)	; exits slave script
+PostMessage("Fn+.ahk", 1) ;exits Fn+.ahk script
 Run %A_ScriptDir%\Fn+.ahk
