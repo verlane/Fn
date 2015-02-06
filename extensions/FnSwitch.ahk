@@ -16,36 +16,37 @@ return
 #If !IsVimMode("_fnDown_") && IsVimMode("_fnSwitch_")
 1::
 *1::F1
-+2::Send +{F2}
++1::Send +{F1}
 2::
 *2::F2
-+3::Send +{F3}
++2::Send +{F2}
 3::
 *3::F3
-+4::Send +{F4}
++3::Send +{F3}
 4::
 *4::F4
-+5::Send +{F5}
++4::Send +{F4}
 5::
 *5::F5
-+6::Send +{F6}
++5::Send +{F5}
 6::
 *6::F6
-+7::Send +{F7}
++6::Send +{F6}
 7::
 *7::F7
-+8::Send +{F8}
++7::Send +{F7}
 8::
 *8::F8
-+9::Send +{F9}
++8::Send +{F8}
 9::
 *9::F9
-+0::Send +{F10}
++9::Send +{F9}
 0::
 *0::F10
-+SC00C::Send +{F11}
++0::Send +{F10}
 SC00C::
 *SC00C::F11
-+=::Send +{F12}
++SC00C::Send +{F11}
 =::
 *=::F12
++=::Send +{F12}

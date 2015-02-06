@@ -23,46 +23,46 @@ m::SendFnKey("{Enter}")
 BS::SendFnKey("{Del}")
 +y::SendFnKey("^a^c{Right}")
 +x::SendFnKey("^a^x")
-*h::Left
-*l::Right
-+1::Send +{F1}
+*h::SendFnKey("{Left}")
+*j::SendFnKey("{Down}")
+*k::SendFnKey("{Up}")
+*l::SendFnKey("{Right}")
 1::
-*1::F1
-+2::Send +{F2}
+*1::SendFnKey("{F1}")
++1::SendFnKey("+{F1}")
 2::
-*2::F2
-+3::Send +{F3}
+*2::SendFnKey("{F2}")
++2::SendFnKey("+{F2}")
 3::
-*3::F3
-+4::Send +{F4}
+*3::SendFnKey("{F3}")
++3::SendFnKey("+{F3}")
 4::
-*4::F4
-+5::Send +{F5}
+*4::SendFnKey("{F4}")
++4::SendFnKey("+{F4}")
 5::
-*5::F5
-+6::Send +{F6}
+*5::SendFnKey("{F5}")
++5::SendFnKey("+{F5}")
 6::
-*6::F6
-+7::Send +{F7}
+*6::SendFnKey("{F6}")
++6::SendFnKey("+{F6}")
 7::
-*7::F7
-+8::Send +{F8}
+*7::SendFnKey("{F7}")
++7::SendFnKey("+{F7}")
 8::
-*8::F8
-+9::Send +{F9}
+*8::SendFnKey("{F8}")
++8::SendFnKey("+{F8}")
 9::
-*9::F9
-+0::Send +{F10}
+*9::SendFnKey("{F9}")
++9::SendFnKey("+{F9}")
 0::
-*0::F10
-+SC00C::Send +{F11}
+*0::SendFnKey("{F10}")
++0::SendFnKey("+{F10}")
++SC00C::SendFnKey("+{F11}") ; KEY:-
 SC00C::
-*SC00C::F11
-+=::Send +{F12}
+*SC00C::SendFnKey("{F11}")
++=::SendFnKey("+{F12}")
 =::
-*=::F12
+*=::SendFnKey("{F12}")
 Esc::SendFnKey("``")
 +Esc::SendFnKey("~")
-
-;^=::SoundSet +5  ; Increase master volume by 5%
-;^-::SoundSet -5  ; Decrease master volume by 5%
+`;::AppsKey
