@@ -7,9 +7,9 @@ AutoHotkey로 구현한 윈도 Vim 에뮬레이션입니다.
 
 * Vim모드 전환이 간단한 `Tab`키 온/오프
 * 프로그램별로 키 동작을 설정 가능한 확장기능
-	* `d` `y` `g` 기능 간소화, 숫자키를 펑션키로, `Ctrl`+`-` `Ctrl`+`=` 볼륨조절  `FnDownKey.ahk`
+	* `d` `y` `g` 기능 간소화, 숫자키를 펑션키로  `FnDownKey.ahk`
 	* Notepad에서 `/` `*` `#` 검색기능 추가 `NotepadGroup.ahk`
-	* `Ctrl`+`q` 숫자키를 펑션키로 고정, hjkl 스페이스바로 마우스 조작 `FnSwitch.ahk`
+	* `Tab`+`q` 숫자키를 펑션키로 고정, hjkl 스페이스바로 마우스 조작, `-(_)` `=(+)` 볼륨조절 `FnSwitch.ahk`
 
 ## 동작환경 및 설치
 
