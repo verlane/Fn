@@ -21,6 +21,7 @@ t::SendFnKey("+{End}")
 [::SendEscKey()
 m::SendFnKey("{Enter}")
 BS::SendFnKey("{Del}")
+z::SendFnKey("^a^c{Right}")
 +y::SendFnKey("^a^c{Right}")
 +x::SendFnKey("^a^x")
 *h::SendFnKey("{Left}")
@@ -66,3 +67,7 @@ SC00C::
 Esc::SendFnKey("``")
 +Esc::SendFnKey("~")
 `;::AppsKey
+`::
+  Winset, Alwaysontop, , A
+  SendFnKey("")
+return
