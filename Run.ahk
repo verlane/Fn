@@ -1,3 +1,5 @@
+Menu, Tray, Icon, %A_ScriptDir%\Harwen-Simple-RUN.ico
+
 FileGetTime extensionsFileTime, %A_ScriptDir%\tmp\extensions.ahk
 
 isMakeExetensions := false
