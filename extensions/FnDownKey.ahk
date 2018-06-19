@@ -71,6 +71,32 @@ Esc::SendFnKey("``")
   Winset, Alwaysontop, , A
   SendFnKey("")
 return
-Up::Send {Volume_Up}
-Down::Send {Volume_Down}
-Left::Send {Volume_Mute}
+
+Right::
+  Send {Volume_Up}
+  SendFnKey("")
+return
+Left::
+  Send {Volume_Down}
+  SendFnKey("")
+return
+Down::
+  Send {Volume_Mute}
+  SendFnKey("")
+return
+^Left::
+  Send {Media_Prev}
+  SendFnKey("")
+return
+^Right::
+  Send {Media_Next}
+  SendFnKey("")
+return
+^Up::
+  Send {Media_Play_Pause}
+  SendFnKey("")
+return
+^Down::
+  Send {Media_Stop}
+  SendFnKey("")
+return
