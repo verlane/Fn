@@ -39,22 +39,17 @@ w::SendFnKey("^w")
 x::SendFnKey("^x")
 y::SendFnKey("^y")
 z::SendFnKey("^z")
-
 '::SendFnKey("^'")
 `;::
-  PostMessage("BSB.ahk", 2)	; show bsb gui
+  PostMessageSub("BSB.ahk", 2)	; show bsb gui
   SendFnKey("")
 Return
-
 
 #If IsVimMode("_fnCtrl_")
 LShift::RShift
 LCtrl::LWin
-; LAlt & q::AltTab
-; <!q::AltTab
 
-
-PostMessage(Receiver, Message) {
+PostMessageSub(Receiver, Message) {
 	oldTMM := A_TitleMatchMode, oldDHW := A_DetectHiddenWindows
 	SetTitleMatchMode, 3
 	DetectHiddenWindows, on

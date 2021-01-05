@@ -47,42 +47,18 @@ z::SendFnKey("^a^c{Right}")
 *j::SendFnKey("{Down}")
 *k::SendFnKey("{Up}")
 *l::SendFnKey("{Right}")
-1::
-*1::SendFnKey("{F1}")
-+1::SendFnKey("+{F1}")
-2::
-*2::SendFnKey("{F2}")
-+2::SendFnKey("+{F2}")
-3::
-*3::SendFnKey("{F3}")
-+3::SendFnKey("+{F3}")
-4::
-*4::SendFnKey("{F4}")
-+4::SendFnKey("+{F4}")
-5::
-*5::SendFnKey("{F5}")
-+5::SendFnKey("+{F5}")
-6::
-*6::SendFnKey("{F6}")
-+6::SendFnKey("+{F6}")
-7::
-*7::SendFnKey("{F7}")
-+7::SendFnKey("+{F7}")
-8::
-*8::SendFnKey("{F8}")
-+8::SendFnKey("+{F8}")
-9::
-*9::SendFnKey("{F9}")
-+9::SendFnKey("+{F9}")
-0::
-*0::SendFnKey("{F10}")
-+0::SendFnKey("+{F10}")
-SC00C::
-*SC00C::SendFnKey("{F11}")
-+SC00C::SendFnKey("+{F11}") ; KEY:-
-SC00D::
-*SC00D::SendFnKey("{F12}")
-+SC00D::SendFnKey("+{F12}") ; KEY:=
+SC002::F1 ; key 1
+SC003::F2 ; key 2
+SC004::F3 ; key 3
+SC005::F4 ; key 4
+SC006::F5 ; key 5
+SC007::F6 ; key 6
+SC008::F7 ; key 7
+SC009::F8 ; key 8
+SC00A::F9 ; key 9
+SC00B::F10 ; key 0
+SC00C::F11 ; key -
+SC00D::F12 ; key =
 Esc::SendFnKey("``")
 +Esc::SendFnKey("~")
 /::AppsKey
