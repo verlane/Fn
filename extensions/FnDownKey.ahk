@@ -17,7 +17,8 @@ i::SendFnKey("{Home}{Enter _n_}{Up _n_}")
 #If IsVimMode("_fnDown_") && IsVimMode("_visual_")
 e::SendFnKey("+{End}")
 r::SendFnKey("+{Home}")
-b::SendFnKey("^+{Left _n_}")
+b::SendFnKey("+{Left _n_}")
++b::SendFnKey("^+{Left _n_}")
 c::SendFnKey("^x", "_insert_", "_lineCopy_")
 +c::SendFnKey("^x", "_insert_", "_lineCopy_")
 d::SendFnKey("^x", "_normal_", "_lineCopy_")
@@ -37,36 +38,49 @@ x::SendFnKey("^x", "_normal_", "_lineCopy_")
 y::SendFnKey("^c", "_normal_", "_lineCopy_")
 
 #If IsVimMode("_fnDown_")
-[::SendEscKey()
-m::SendFnKey("{Enter}")
-BS::SendFnKey("{Del}")
-z::SendFnKey("^a^c{Right}")
-+y::SendFnKey("^a^c{Right}")
-+x::SendFnKey("^a^x")
-*h::SendFnKey("{Left}")
-*j::SendFnKey("{Down}")
-*k::SendFnKey("{Up}")
-*l::SendFnKey("{Right}")
-SC002::F1 ; key 1
-SC003::F2 ; key 2
-SC004::F3 ; key 3
-SC005::F4 ; key 4
-SC006::F5 ; key 5
-SC007::F6 ; key 6
-SC008::F7 ; key 7
-SC009::F8 ; key 8
-SC00A::F9 ; key 9
-SC00B::F10 ; key 0
-SC00C::F11 ; key -
-SC00D::F12 ; key =
 Esc::SendFnKey("``")
 +Esc::SendFnKey("~")
-/::AppsKey
+/::SendFnKey("{AppsKey}")
 `::
   Winset, Alwaysontop, , A
   SendFnKey("")
 return
-
+,::SendFnKey("{Bs}")
+.::SendFnKey("{Del}")
+[::SendEscKey()
+BS::SendFnKey("{Del}")
+*SC002::SendFnKey("{F1}") ; key 1
+*SC003::SendFnKey("{F2}") ; key 2
+*SC004::SendFnKey("{F3}") ; key 3
+*SC005::SendFnKey("{F4}") ; key 4
+*SC006::SendFnKey("{F5}") ; key 5
+*SC007::SendFnKey("{F6}") ; key 6
+*SC008::SendFnKey("{F7}") ; key 7
+*SC009::SendFnKey("{F8}") ; key 8
+*SC00A::SendFnKey("{F9}") ; key 9
+*SC00B::SendFnKey("{F10}") ; key 0
+*SC00C::SendFnKey("{F11}") ; key -
+*SC00D::SendFnKey("{F12}") ; key =
++SC002::SendFnKey("+{F1}") ; key 1
++SC003::SendFnKey("+{F2}") ; key 2
++SC004::SendFnKey("+{F3}") ; key 3
++SC005::SendFnKey("+{F4}") ; key 4
++SC006::SendFnKey("+{F5}") ; key 5
++SC007::SendFnKey("+{F6}") ; key 6
++SC008::SendFnKey("+{F7}") ; key 7
++SC009::SendFnKey("+{F8}") ; key 8
++SC00A::SendFnKey("+{F9}") ; key 9
++SC00B::SendFnKey("+{F10}") ; key 0
++SC00C::SendFnKey("+{F11}") ; key -
++SC00D::SendFnKey("+{F12}") ; key =
+*h::SendFnKey("{Left}")
+*j::SendFnKey("{Down}")
+*k::SendFnKey("{Up}")
+*l::SendFnKey("{Right}")
+m::SendFnKey("{Enter}")
++x::SendFnKey("^a^x")
++y::SendFnKey("^a^c{Right}")
+z::SendFnKey("^a^c{Right}")
 Right::
   Send {Volume_Up}
   SendFnKey("")
@@ -93,6 +107,7 @@ return
   Send {Media_Next}
   SendFnKey("")
 return
+Up::
 ^Up::
   Send {Media_Play_Pause}
   SendFnKey("")
@@ -101,7 +116,8 @@ return
   Send {Media_Stop}
   SendFnKey("")
 return
-b::SendFnKey("^{Left _n_}")
+b::SendFnKey("{Left _n_}")
++b::SendFnKey("^{Left _n_}")
 +d::SendFnKey("+{End}^x")
 f::SendFnKey("{PgDn _n_}")
 +f::SendFnKey("{PgUp _n_}")
