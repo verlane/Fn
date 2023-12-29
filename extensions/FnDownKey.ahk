@@ -81,10 +81,12 @@ m::SendFnKey("{Enter}")
 +x::SendFnKey("^a^x")
 +y::SendFnKey("^a^c{Right}")
 z::SendFnKey("^a^c{Right}")
+WheelUp::
 Right::
   Send {Volume_Up}
   SendFnKey("")
 return
+WheelDown::
 Left::
   Send {Volume_Down}
   SendFnKey("")
